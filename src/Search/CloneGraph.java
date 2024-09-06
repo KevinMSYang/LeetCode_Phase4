@@ -45,8 +45,12 @@
 
 package Search;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 public class CloneGraph {
 	class Node {
@@ -66,6 +70,23 @@ public class CloneGraph {
 	    }
 	}
     public Node cloneGraph(Node node) {
+        if (node == null) return null;
+        Map<Node, Node> map = new HashMap<>();
+        Queue<Node> q = new ArrayDeque<>();
         
+        q.add(node);
+        map.put(node, new Node(node.val));
+        
+        while (!q.isEmpty()) {
+        	Node u = q.poll();
+        	for (Node v : u.neighbors) {
+        		if (!map.containsKey(v)) {
+        			map.put(v, new Node(v.val));
+        			q.add(v);
+        		}
+        		map.get(u).neighbors.add(map.get(v));
+        	}
+        }
+        return map.get(node);
     }
 }
